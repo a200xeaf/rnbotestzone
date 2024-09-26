@@ -1,12 +1,15 @@
 import {createDevice, Device, IPatcher} from "@rnbo/js";
 import oscJson from './nodesource/osc/osc.export.json'
 import gainJson from './nodesource/gain/gain.export.json'
+import polyJson from './nodesource/poly/poly.export.json'
 
-const context = new AudioContext();
+export const context = new AudioContext();
 // @ts-expect-error rainbow issue
 const patcherOsc: IPatcher = oscJson;
 // @ts-expect-error rainbow issue
 const patcherGain: IPatcher = gainJson;
+// @ts-expect-error rainbow issue
+const patcherPoly: IPatcher = polyJson;
 
 export const toggleAudio = async() => {
     if (context.state === 'running') {
@@ -18,14 +21,14 @@ export const toggleAudio = async() => {
     }
 }
 
-const osc = await createDevice({context, patcher: patcherOsc})
+export const poly = await createDevice({context, patcher: patcherPoly})
 const gain = await createDevice({context, patcher: patcherGain})
 
 const devices = new Map<string, Device>()
-devices.set('osc', osc)
+devices.set('poly', poly)
 devices.set('gain', gain)
 
-osc.node.connect(gain.node)
+poly.node.connect(gain.node)
 gain.node.connect(context.destination)
 
 // Generalized function to change the parameter value of any device
