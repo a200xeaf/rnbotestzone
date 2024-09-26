@@ -4,18 +4,19 @@ import {useDataNodeStore} from "../store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {mainemitter} from "../eventbus/eventbus.ts";
 
-interface NumberProps {
+interface ViewerProps {
     id: string
     data: {
         viewer_value: any
     }
 }
 
-const Viewer: React.FC<NumberProps> = ({id, data}) => {
+const Viewer: React.FC<ViewerProps> = ({id, data}) => {
     const connections = useHandleConnections({type: 'target', id: 'data'})
     const updateNode = useDataNodeStore(useShallow((state) => state.updateNode))
 
     const handleViewer = (e) => {
+        console.log(e)
         updateNode(id, {viewer_value: e})
     }
 

@@ -27,9 +27,10 @@ export interface DataNodeState {
 
 export const useDataNodeStore = create<DataNodeState>((set, get) => ({
     nodes: [
-        { id: '1', position: { x: 0, y: 0 }, data: { number_number: '1' }, type: 'number' },
-        { id: '4', position: { x: 0, y: 0 }, data: { number_number: '1' }, type: 'number' },
-        { id: '2', position: { x: 0, y: 100 }, data: { viewer_value: null }, type: 'viewer' },
+        { id: '1', position: { x: 0, y: 0 }, data: { number_number: '1' }, type: 'numberNode' },
+        { id: '4', position: { x: 0, y: 0 }, data: { number_number: '1' }, type: 'numberNode' },
+        { id: '5', position: { x: 0, y: 0 }, data: { string_string: 'hello' }, type: 'stringNode' },
+        { id: '2', position: { x: 0, y: 100 }, data: { viewer_value: null }, type: 'viewerNode' },
     ],
     edges: [],
 

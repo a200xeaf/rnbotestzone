@@ -3,10 +3,12 @@ import {useDataNodeStore} from "./store.ts";
 import {useShallow} from "zustand/react/shallow";
 import NumberNode from './nodes/Number.tsx'
 import ViewerNode from './nodes/Viewer.tsx'
+import StringNode from "./nodes/String.tsx";
 
 const nodeTypes = {
-    number: NumberNode,
-    viewer: ViewerNode,
+    numberNode: NumberNode,
+    viewerNode: ViewerNode,
+    stringNode: StringNode,
 }
 
 const DataTest = () => {
