@@ -4,11 +4,13 @@ import {useShallow} from "zustand/react/shallow";
 import NumberNode from './nodes/Number.tsx'
 import ViewerNode from './nodes/Viewer.tsx'
 import StringNode from "./nodes/String.tsx";
+import AdderNode from "./nodes/Adder.tsx";
 
 const nodeTypes = {
     numberNode: NumberNode,
     viewerNode: ViewerNode,
     stringNode: StringNode,
+    adderNode: AdderNode,
 }
 
 const DataTest = () => {
@@ -22,8 +24,24 @@ const DataTest = () => {
 
     const onEdgesChange = useDataNodeStore(useShallow((state) => state.onEdgesChange))
     const onEdgesDelete = useDataNodeStore(useShallow((state) => state.onEdgesDelete))
+
+    const createNode = useDataNodeStore(useShallow((state) => state.createNode))
     return (
         <div className='h-screen w-screen'>
+            <div className='flex w-full absolute z-10'>
+                <button className='p-2 bg-gray-200 rounded-xl mx-2' onClick={() => createNode("numberNode")}>
+                    Number Node
+                </button>
+                <button className='p-2 bg-gray-200 rounded-xl mx-2' onClick={() => createNode("stringNode")}>
+                    String Node
+                </button>
+                <button className='p-2 bg-gray-200 rounded-xl mx-2' onClick={() => createNode("adderNode")}>
+                    Adder Node
+                </button>
+                <button className='p-2 bg-gray-200 rounded-xl mx-2' onClick={() => createNode("viewerNode")}>
+                    Viewer Node
+                </button>
+            </div>
 
             <ReactFlow
                 nodes={nodes}

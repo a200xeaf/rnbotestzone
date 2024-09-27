@@ -7,7 +7,7 @@ import {mainemitter} from "../eventbus/eventbus.ts";
 interface ViewerProps {
     id: string
     data: {
-        viewer_value: any
+        viewer_value: never
     }
 }
 
@@ -16,7 +16,6 @@ const Viewer: React.FC<ViewerProps> = ({id, data}) => {
     const updateNode = useDataNodeStore(useShallow((state) => state.updateNode))
 
     const handleViewer = (e) => {
-        console.log(e)
         updateNode(id, {viewer_value: e})
     }
 
@@ -48,7 +47,7 @@ const Viewer: React.FC<ViewerProps> = ({id, data}) => {
             </div>
             <div className='flex flex-col w-full h-[3rem] bg-white justify-center items-center'>
                 <p>Value: {data.viewer_value}</p>
-                <p>ID: {id}</p>
+                <p className='text-xs'>ID: {id}</p>
             </div>
         </div>
     )
