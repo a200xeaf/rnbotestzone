@@ -11,13 +11,26 @@ interface NumberProps {
     }
 }
 
-const Number: React.FC<NumberProps> = ({id, data}) => {
+const NumberNode: React.FC<NumberProps> = ({id, data}) => {
     const updateNode = useDataNodeStore(useShallow((state) => state.updateNode))
 
     const handleNumber = (e: ChangeEvent<HTMLInputElement>) => {
-        updateNode(id, {number_number: e.target.value})
-        mainemitter.emit(id + ":" + "number_number", e.target.value)
-    }
+        let value = e.target.value;
+
+        // If the input is cleared, set the value to 0
+        if (value === "") {
+            updateNode(id, { number_number: 0 });
+            mainemitter.emit(id + ":" + "number_number", 0);
+            return;
+        }
+
+        value = value.replace(/^0+/, "") || "0"; // Fallback to "0" if all zeros are removed
+        console.log(value)
+
+        let finalNumber = Number(value)
+        updateNode(id, { number_number: finalNumber });
+        mainemitter.emit(id + ":" + "number_number", finalNumber);
+    };
 
     return (
         <div className='w-52 h-20 flex flex-col shadow-xl'>
@@ -30,7 +43,7 @@ const Number: React.FC<NumberProps> = ({id, data}) => {
                     min={0}
                     max={100}
                     step={1}
-                    value={data.number_number}
+                    value={Number(data.number_number).toString()}
                     onChange={handleNumber}
                     className='bg-gray-200 h-6'
                 />
@@ -39,4 +52,4 @@ const Number: React.FC<NumberProps> = ({id, data}) => {
         </div>
     )
 }
-export default Number
+export default NumberNode

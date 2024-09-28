@@ -1,8 +1,8 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {Handle, Position, useHandleConnections} from "@xyflow/react";
 import {useDataNodeStore} from "../store.ts";
 import {useShallow} from "zustand/react/shallow";
-import {mainemitter} from "../eventbus/eventbus.ts";
+import {useEmitterSubscriptions} from "../hooks/useEmitterSubscriptions.ts";
 
 interface ViewerProps {
     id: string
@@ -15,38 +15,29 @@ const Viewer: React.FC<ViewerProps> = ({id, data}) => {
     const connections = useHandleConnections({type: 'target', id: 'data'})
     const updateNode = useDataNodeStore(useShallow((state) => state.updateNode))
 
-    const handleViewer = (e) => {
+    const handleViewer = (e: unknown) => {
         updateNode(id, {viewer_value: e})
     }
 
-    useEffect(() => {
-        const activeSubscriptions: (() => void)[] = []
-
-        const subscribeToEmitter = (emitterName: string) => {
-            mainemitter.on(emitterName, handleViewer)
-
-            return () => mainemitter.off(emitterName, handleViewer)
-        }
-
-        connections.forEach(({source, sourceHandle}) => {
-            const emitterName = `${source}:${sourceHandle?.replace('data-', '')}`
-            const unsubscribe = subscribeToEmitter(emitterName)
-            activeSubscriptions.push(unsubscribe)
-        })
-
-        return () => (
-            activeSubscriptions.forEach((unsubscribe) => unsubscribe())
-        )
-    }, [connections]);
+    useEmitterSubscriptions({
+        connections,
+        callback: handleViewer,
+        data
+    })
 
     return (
-        <div className='w-52 h-20 flex flex-col shadow-xl'>
+        <div className='w-52 h-[6rem] flex flex-col shadow-xl'>
             <Handle type='target' position={Position.Top} id='data'/>
             <div className='flex w-full h-[2rem] bg-red-400 items-center'>
                 <span className='text-white font-bold px-2'>Viewer</span>
             </div>
-            <div className='flex flex-col w-full h-[3rem] bg-white justify-center items-center'>
-                <p>Value: {data.viewer_value}</p>
+            <div className='flex flex-col w-full h-[4rem] bg-white justify-center items-center px-2'>
+                <div
+                    className='w-full overflow-x-auto whitespace-nowrap'
+                    style={{maxHeight: '3rem', overflowY: 'hidden'}}
+                >
+                    <p>Value: {data.viewer_value}</p>
+                </div>
                 <p className='text-xs'>ID: {id}</p>
             </div>
         </div>

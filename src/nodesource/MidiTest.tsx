@@ -1,6 +1,6 @@
 import {changeValue, toggleAudio, context, poly} from "../audio.ts";
 import {ChangeEvent, useEffect, useState} from "react";
-import {Input, WebMidi} from "webmidi";
+import {Input, WebMidi, NoteMessageEvent} from "webmidi";
 import {MIDIEvent} from "@rnbo/js";
 
 const MidiTest = () => {
@@ -79,18 +79,22 @@ const MidiTest = () => {
             // Set the new MIDI input and add listeners for "noteon" and "noteoff"
             setMidiInput(selectedInput);
 
-            selectedInput.addListener("noteon", "all", (e) => {
+            // @ts-expect-error shutup
+            selectedInput.addListener("noteon", "all", (e: NoteMessageEvent) => {
                 console.log(e)
                 // console.log("Note On:", e.note.number); // Logs the MIDI note number for note on events
                 const midiInfo = e.data
+                // @ts-expect-error shutup
                 const noteOnEvent = new MIDIEvent(context.currentTime, 0, midiInfo)
                 poly.scheduleEvent(noteOnEvent)
             });
 
-            selectedInput.addListener("noteoff", "all", (e) => {
+            // @ts-expect-error shutup
+            selectedInput.addListener("noteoff", "all", (e: NoteMessageEvent) => {
                 console.log(e)
                 // console.log("Note Off:", e.note.number); // Logs the MIDI note number for note off events
                 const midiInfo = e.data
+                // @ts-expect-error shutup
                 const noteOffEvent = new MIDIEvent(context.currentTime, 0, midiInfo)
                 poly.scheduleEvent(noteOffEvent)
             });

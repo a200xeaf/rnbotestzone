@@ -1,8 +1,9 @@
 import {Handle, Position, useHandleConnections} from "@xyflow/react";
-import React, {ChangeEvent, useEffect} from "react";
+import React, {ChangeEvent} from "react";
 import {useDataNodeStore} from "../store.ts";
 import {useShallow} from "zustand/react/shallow";
 import {mainemitter} from "../eventbus/eventbus.ts";
+import {useEmitterSubscriptions} from "../hooks/useEmitterSubscriptions.ts";
 
 interface AdderProps {
     id: string
@@ -16,34 +17,24 @@ const Adder: React.FC<AdderProps> = ({id, data}) => {
     const updateNode = useDataNodeStore(useShallow((state) => state.updateNode))
 
     const handleAdder = (e: ChangeEvent<HTMLInputElement>) => {
-        updateNode(id, {adder_number: e.target.value})
+        updateNode(id, {adder_number: e.target.valueAsNumber})
     }
 
-    const handleAddition = (e) => {
-        const total = Number(e) + Number(data.adder_number)
-        mainemitter.emit(id + ":" + "adder_result", total)
-    }
-
-    useEffect(() => {
-        console.log("update")
-        const activeSubscriptions: (() => void)[] = []
-
-        const subscribeToEmitter = (emitterName: string) => {
-            mainemitter.on(emitterName, handleAddition)
-
-            return () => mainemitter.off(emitterName, handleAddition)
+    const handleAddition = (e: unknown) => {
+        if (typeof e === 'number') {
+            const total = e + data.adder_number;
+            mainemitter.emit(id + ":" + "adder_result", total);
+        } else {
+            // Handle other types or invalid data here
+            console.warn("Expected a number, but got:", e);
         }
+    }
 
-        connections.forEach(({source, sourceHandle}) => {
-            const emitterName = `${source}:${sourceHandle?.replace('data-', '')}`
-            const unsubscribe = subscribeToEmitter(emitterName)
-            activeSubscriptions.push(unsubscribe)
-        })
-
-        return () => (
-            activeSubscriptions.forEach((unsubscribe) => unsubscribe())
-        )
-    }, [connections, data]);
+    useEmitterSubscriptions({
+        connections,
+        callback: handleAddition,
+        data
+    })
 
     return (
         <div className='w-52 h-20 flex flex-col shadow-xl'>

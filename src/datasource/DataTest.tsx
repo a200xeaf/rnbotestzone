@@ -1,7 +1,7 @@
 import {Background, BackgroundVariant, ReactFlow} from "@xyflow/react";
 import {useDataNodeStore} from "./store.ts";
 import {useShallow} from "zustand/react/shallow";
-import NumberNode from './nodes/Number.tsx'
+import NumberNode from './nodes/NumberNode.tsx'
 import ViewerNode from './nodes/Viewer.tsx'
 import StringNode from "./nodes/String.tsx";
 import AdderNode from "./nodes/Adder.tsx";
@@ -26,6 +26,7 @@ const DataTest = () => {
     const onEdgesDelete = useDataNodeStore(useShallow((state) => state.onEdgesDelete))
 
     const createNode = useDataNodeStore(useShallow((state) => state.createNode))
+    const isValidConnection = useDataNodeStore(useShallow((state) => state.isValidConnection))
     return (
         <div className='h-screen w-screen'>
             <div className='flex w-full absolute z-10'>
@@ -48,6 +49,7 @@ const DataTest = () => {
                 edges={edges}
 
                 onConnect={onConnect}
+                isValidConnection={isValidConnection}
 
                 onNodesChange={onNodesChange}
                 onNodesDelete={onNodesDelete}

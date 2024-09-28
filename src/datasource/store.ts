@@ -2,10 +2,11 @@ import {create} from 'zustand'
 import {
     applyEdgeChanges,
     applyNodeChanges,
-    Edge,
+    Edge, getOutgoers,
     Node as FlowNode, OnConnect,
     OnEdgesChange, OnEdgesDelete,
-    OnNodesChange, OnNodesDelete
+    OnNodesChange, OnNodesDelete,
+    IsValidConnection
 } from '@xyflow/react'
 import {nanoid} from "nanoid";
 
@@ -21,6 +22,7 @@ export interface DataNodeState {
     onEdgesDelete: OnEdgesDelete
 
     updateNode: (id: string, data: Partial<FlowNode['data']>) => void
+    isValidConnection: IsValidConnection
 
     createNode: (nodeName: string) => void
 
@@ -99,5 +101,32 @@ export const useDataNodeStore = create<DataNodeState>((set, get) => ({
                 break
             }
         }
+    },
+    isValidConnection: (connection) => {
+        const nodes = get().nodes
+        const edges = get().edges
+        const target = nodes.find((node) => node.id === connection.target)
+
+        // Check if target is undefined
+        if (!target) {
+            return false
+        }
+
+        const hasCycle = (node: FlowNode, visited = new Set()): boolean => {
+            if (visited.has(node.id)) return false
+
+            visited.add(node.id)
+
+            for (const outgoer of getOutgoers(node, nodes, edges)) {
+                if (outgoer.id === connection.source) return true
+                if (hasCycle(outgoer, visited)) return true
+            }
+
+            return false
+        };
+
+        if (target.id === connection.source) return false
+
+        return !hasCycle(target)
     }
 }))
