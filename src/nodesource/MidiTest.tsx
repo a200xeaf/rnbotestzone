@@ -17,7 +17,7 @@ const MidiTest = () => {
 
     const handleGain2Change = (e: ChangeEvent<HTMLInputElement>) => {
         setGain2Amt(e.target.valueAsNumber);
-        changeValue2('gain2', 'gain', e.target.valueAsNumber)
+        changeValue2('gain', 'gain2', e.target.valueAsNumber)
     }
 
     const handleMidi = async () => {

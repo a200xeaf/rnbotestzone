@@ -50,11 +50,17 @@ export const changeValue2 = (deviceName: string, paramName: string, value: numbe
     const device = devices.get(deviceName);
 
     if (device instanceof FaustMonoAudioWorkletNode) {
-        console.log("Device is a FaustMonoAudioWorkletNode.");
+        // device.setParamValue(paramName, value)
+        const param = device.parameters.get(`/${deviceName}/${paramName}`)
+        if (param === undefined) {
+            console.warn(`"${paramName}"`, "parameter in device", `"${deviceName}"`, "not found")
+        } else {
+            param.setValueAtTime(value, 0)
+        }
     } else if (device instanceof WorkletDevice) {
         console.log("Device is a WorkletDevice.");
     } else {
-        console.log("Device is of an unknown type.");
+        console.warn(`Device "${deviceName}" in changeValue is of an unknown type.`);
     }
 };
 
