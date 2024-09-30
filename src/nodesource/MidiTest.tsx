@@ -1,49 +1,23 @@
-import {changeValue, toggleAudio, context, poly} from "../audio.ts";
+import {toggleAudio, context, poly, changeValue2} from "../audio.ts";
 import {ChangeEvent, useEffect, useState} from "react";
 import {Input, WebMidi, NoteMessageEvent} from "webmidi";
 import {MIDIEvent} from "@rnbo/js";
 
 const MidiTest = () => {
     const [gainAmt, setGainAmt] = useState(1.0);
-    const [gainAmt2, setGainAmt2] = useState(1.0);
-    const [attack, setAttack] = useState(100.0);
-    const [decay, setDecay] = useState(100.0);
-    const [sustain, setSustain] = useState(0.6);
-    const [release, setRelease] = useState(100.0);
+    const [gain2Amt, setGain2Amt] = useState(1.0);
     const [inputNames, setInputNames] = useState<string[]>([]);
     const [selectedInputName, setSelectedInputName] = useState<string | null>(null);
     const [midiInput, setMidiInput] = useState<Input | null>(null);
 
     const handleGainChange = (e: ChangeEvent<HTMLInputElement>) => {
         setGainAmt(e.target.valueAsNumber);
-        changeValue('gain', 'gain', e.target.valueAsNumber)
+        changeValue2('gain', 'gain', e.target.valueAsNumber)
     }
 
-    const handleGainChange2 = (e: ChangeEvent<HTMLInputElement>) => {
-        setGainAmt2(e.target.valueAsNumber);
-        changeValue('gain', 'gain2', e.target.valueAsNumber)
-    }
-
-    const handleADSRChange = (e: ChangeEvent<HTMLInputElement>) => {
-        switch (e.target.id) {
-            case "attack":
-                setAttack(e.target.valueAsNumber);
-                changeValue('poly', 'poly_attack', e.target.valueAsNumber)
-                break
-            case "decay":
-                setDecay(e.target.valueAsNumber);
-                changeValue('poly', 'poly_decay', e.target.valueAsNumber)
-                break
-            case "sustain":
-                setSustain(e.target.valueAsNumber);
-                changeValue('poly', 'poly_sustain', e.target.valueAsNumber)
-                break
-            case "release":
-                setRelease(e.target.valueAsNumber);
-                changeValue('poly', 'poly_release', e.target.valueAsNumber)
-                break
-        }
-
+    const handleGain2Change = (e: ChangeEvent<HTMLInputElement>) => {
+        setGain2Amt(e.target.valueAsNumber);
+        changeValue2('gain2', 'gain', e.target.valueAsNumber)
     }
 
     const handleMidi = async () => {
@@ -113,17 +87,11 @@ const MidiTest = () => {
     };
 
     return (
-        <div className='p-5 flex'>
+        <div className='p-5 flex flex-col gap-y-4'>
             <p>Hello</p>
             <button className='p-2 bg-gray-200 drop-shadow-lg' onClick={toggleAudio}>Start</button>
             <input value={gainAmt} onChange={handleGainChange} min={0} max={1} step={0.01} type='range'/>
-            <input value={gainAmt2} onChange={handleGainChange2} min={0} max={1} step={0.01} type='range'/>
-            <div className='flex flex-col'>
-                <input id='attack' value={attack} onChange={handleADSRChange} min={1} max={1000} step={0.01} type='range'/>
-                <input id='decay' value={decay} onChange={handleADSRChange} min={1} max={1000} step={0.01} type='range'/>
-                <input id='sustain' value={sustain} onChange={handleADSRChange} min={0} max={1} step={0.01} type='range'/>
-                <input id='release' value={release} onChange={handleADSRChange} min={1} max={10000} step={0.01} type='range'/>
-            </div>
+            <input value={gain2Amt} onChange={handleGain2Change} min={0} max={1} step={0.01} type='range'/>
             <button onClick={handleMidi}>Check midi</button>
             <select onChange={handleSelectionChange}>
                 {inputNames.length > 0 && <option value="">None</option>}
