@@ -2,6 +2,7 @@ import {toggleAudio, context, poly, changeValue2} from "../audio.ts";
 import {ChangeEvent, useEffect, useState} from "react";
 import {Input, WebMidi, NoteMessageEvent} from "webmidi";
 import {MIDIEvent} from "@rnbo/js";
+import MidiKeyboard from "./MidiKeyboard.tsx";
 
 const MidiTest = () => {
     const [gainAmt, setGainAmt] = useState(1.0);
@@ -101,6 +102,7 @@ const MidiTest = () => {
                     ))) : <option value={""}>No Midi Inputs Detected</option>
                 }
             </select>
+            <MidiKeyboard />
         </div>
     )
 }
