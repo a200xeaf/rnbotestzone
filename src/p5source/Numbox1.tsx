@@ -51,7 +51,7 @@ const Numbox1: React.FC<NumboxProps> = ({id, value, min_value, max_value, defaul
                 }
 
                 // Construct the full formatted string including the negative sign if necessary
-                final = isNegative ? `-\u303F${absValue}` : absValue;
+                final = isNegative ? `\u2212${absValue}` : absValue;
 
                 // If the length (including negative sign) exceeds maxDigits, truncate and add ellipsis
                 if (final.length > maxDigits) {
