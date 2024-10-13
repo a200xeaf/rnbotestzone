@@ -27,7 +27,7 @@ const App: React.FC = () => {
                 callback={handleCallback}
             />
             <p>Current Value: {value.toFixed(2)}</p>
-            <Numbox1 id="spang" value={valueNumbox} min_value={0} max_value={100} default_value={50} callback={handleNumbox} />
+            <Numbox1 id="spang" value={valueNumbox} min_value={-10000} max_value={10000} default_value={50} callback={handleNumbox} />
         </div>
     );
 };
