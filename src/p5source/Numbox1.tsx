@@ -16,6 +16,8 @@ const Numbox1: React.FC<NumboxProps> = ({id, value, min_value, max_value, defaul
 
     useEffect(() => {
         const sketch = (p: p5 & { updateValue? : (newValue: number) => void}) => {
+            let size: number = 50
+
             let isDragging: boolean = false
             let prevY: number | null = null
             let tempVal: number = value
@@ -68,7 +70,7 @@ const Numbox1: React.FC<NumboxProps> = ({id, value, min_value, max_value, defaul
             };
 
             p.setup = () => {
-                p.createCanvas(70, 30)
+                p.createCanvas(size, size / 2)
                 p.smooth();
                 p.pixelDensity(2);
                 p.noLoop();
@@ -79,12 +81,12 @@ const Numbox1: React.FC<NumboxProps> = ({id, value, min_value, max_value, defaul
                 p.noFill()
                 p.stroke(200)
                 p.strokeWeight(3)
-                p.rect(0, 0, 70, 30)
+                p.rect(0, 0, size, size / 2)
                 p.noStroke()
                 p.fill(0)
                 p.textFont("Arial")
-                p.textSize(20)
-                p.text(formatNumber(tempVal), 7, (p.height / 2 + (p.width / 10)))
+                p.textSize(size * 0.3)
+                p.text(formatNumber(tempVal), p.width * 0.1, p.height * 0.72)
             }
 
             p.mousePressed = () => {
