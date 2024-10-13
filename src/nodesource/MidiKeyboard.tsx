@@ -76,7 +76,7 @@ const MidiKeyboard = () => {
         <>
             <div>MidiKeyboard</div>
             <p>Last key pressed: {midiNumberToNote(lastKey[0])} with velocity {lastKey[1] === undefined ? "nothing" : lastKey[1]}</p>
-            <p>Octave: {octave >= 0 ? `+${octave / 12}` : `-${octave / 12}`}</p>
+            <p>Octave: {octave >= 0 ? `+${octave / 12}` : `${octave / 12}`}</p>
         </>
     );
 };
