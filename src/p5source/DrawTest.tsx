@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Knob1 from "./Knob1.tsx";
 import Numbox1 from "./Numbox1.tsx";
+import {amountFormat, dbFormat, frequencyFormat, panFormat, timeFormat} from "./numberFormats.ts";
 
 const App: React.FC = () => {
-    const [value, setValue] = useState(50);
+    const [value, setValue] = useState(1.2);
     const [valueNumbox, setValueNumbox] = useState(50);
 
     const handleCallback = (id: string, newValue: number) => {
@@ -21,12 +22,12 @@ const App: React.FC = () => {
             <Knob1
                 id="main1"
                 value={value}
-                min_value={0}
-                max_value={1000}
-                default_value={20}
+                min_value={-200}
+                max_value={200}
+                default_value={0}
                 callback={handleCallback}
             />
-            <p>Current Value: {value.toFixed(2)}</p>
+            <p>Current Value: {panFormat(value)}</p>
             <Numbox1 id="spang" value={valueNumbox} min_value={-10000} max_value={10000} default_value={50} callback={handleNumbox} />
         </div>
     );
