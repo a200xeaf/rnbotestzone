@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Knob1 from "./Knob1.tsx";
 import Numbox1 from "./Numbox1.tsx";
-import {amountFormat, dbFormat, frequencyFormat, panFormat, timeFormat} from "./numberFormats.ts";
+import {panFormat} from "./numberFormats.ts";
+import PianoKeyboard from "./PianoKeyboard.tsx";
 
 const App: React.FC = () => {
     const [value, setValue] = useState(1.2);
@@ -29,6 +30,7 @@ const App: React.FC = () => {
             />
             <p>Current Value: {panFormat(value)}</p>
             <Numbox1 id="spang" value={valueNumbox} min_value={-10000} max_value={10000} default_value={50} callback={handleNumbox} />
+            <PianoKeyboard />
         </div>
     );
 };

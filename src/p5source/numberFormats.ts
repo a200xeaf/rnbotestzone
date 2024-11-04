@@ -5,7 +5,7 @@ const fixedMax = (x: number, max: number): string => {
     if (length <= (max - 1)) {
         final = x.toFixed(max - length)
     } else {
-        final = Math.floor(x)
+        final = Math.floor(x).toString()
     }
 
     return final
@@ -53,6 +53,6 @@ export const panFormat = (x: number): string => {
         return "C"
     }
 
-    const final: string = Math.floor(Math.abs(x))
+    const final: string = Math.floor(Math.abs(x)).toString()
     return final + (x > 0 ? "R" : "L")
 }
